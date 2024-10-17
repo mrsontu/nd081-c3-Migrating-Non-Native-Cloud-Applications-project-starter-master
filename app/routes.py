@@ -67,10 +67,18 @@ def notification():
             db.session.add(notification)
             db.session.commit()
 
-            ##################################################
-            ## TODO: Refactor This logic into an Azure Function
-            ## Code below will be replaced by a message queue
-            #################################################
+            try:
+                # Create a message containing the notification ID
+                message = ServiceBusMessage(str(notification_id))
+                
+                # Send the message to the queue
+                with queue_client.get_queue_sender() as sender:
+                    sender.send_messages(message)
+                
+                print(f"Notification ID {notification_id} enqueued successfully.")
+            except Exception as e:
+                 print(f"Failed to enqueue notification ID {notification_id}: {e}")
+
             attendees = Attendee.query.all()
 
             for attendee in attendees:
@@ -80,11 +88,21 @@ def notification():
             notification.completed_date = datetime.utcnow()
             notification.status = 'Notified {} attendees'.format(len(attendees))
             db.session.commit()
-            # TODO Call servicebus queue_client to enqueue notification ID
+            # TODO: Call servicebus queue_client to enqueue notification ID
+            try:
+                # Create a message containing the notification ID
+                message = ServiceBusMessage(str(notification_id))
 
-            #################################################
-            ## END of TODO
-            #################################################
+                # Send the message to the queue
+                with queue_client.get_queue_sender(queue_name="your-queue-name") as sender:
+                    sender.send_messages(message)
+                
+                print(f"Notification ID {notification_id} enqueued successfully.")
+            except Exception as e:
+                print(f"Failed to enqueue notification ID {notification_id}: {e}")
+                return redirect('/Notifications')
+            except :
+                logging.error('log unable to save notification')
 
             return redirect('/Notifications')
         except :
