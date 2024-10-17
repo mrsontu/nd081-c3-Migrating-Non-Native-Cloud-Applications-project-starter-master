@@ -73,7 +73,7 @@ def notification():
                 logging.error('log send queue')
                 
                 # Send the message to the queue
-                with queue_client.get_queue_sender() as sender:
+                with queue_client.get_sender() as sender:
                     sender.send_messages(message)
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
@@ -96,7 +96,7 @@ def notification():
                 message = Message(str(notification_id))
 
                 # Send the message to the queue
-                with queue_client.get_queue_sender() as sender:
+                with queue_client.get_sender() as sender:
                     sender.send_messages(message)
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
@@ -133,7 +133,7 @@ def pushNotification():
             logging.info(f'log send queue {notification.id}')
             
             # Send the message to the queue
-            with queue_client.get_queue_sender() as sender:
+            with queue_client.get_sender() as sender:
                 sender.send_messages(message)
             
             print(f"Notification ID {notification.id} enqueued successfully.")
@@ -159,7 +159,7 @@ def pushNotification():
             #     message = Message(str(notification.id))
 
             #     # Send the message to the queue
-            #     with queue_client.get_queue_sender() as sender:
+            #     with queue_client.get_sender() as sender:
             #         sender.send_messages(message)
                 
             #     print(f"Notification ID {notification.id} enqueued successfully.")
