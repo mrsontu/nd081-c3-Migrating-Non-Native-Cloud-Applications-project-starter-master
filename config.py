@@ -8,7 +8,7 @@ class BaseConfig:
     POSTGRES_USER="azAdmin" #TODO: Update value
     POSTGRES_PW="abcd1234_"   #TODO: Update value
     POSTGRES_DB="project3"   #TODO: Update value
-    DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(POSTGRES_USER,POSTGRES_PW,POSTGRES_URL,POSTGRES_DB)
+    DB_URL = 'postgresql://azAdmin:abcd1234_@project3.postgres.database.azure.com/project3'
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or DB_URL
     CONFERENCE_ID = 1
     SECRET_KEY = 'QRAKxlm8DIusTVB13izNCiCQQCRsd2w2N+ASbOkzfCc='
