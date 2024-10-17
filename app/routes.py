@@ -94,7 +94,7 @@ def notification():
                 message = Message(str(notification_id))
 
                 # Send the message to the queue
-                with queue_client.get_queue_sender(queue_name="your-queue-name") as sender:
+                with queue_client.get_queue_sender() as sender:
                     sender.send_messages(message)
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
