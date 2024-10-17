@@ -1,4 +1,4 @@
-from app import app, db, queue_client
+from app import app, db
 from datetime import datetime
 from app.models import Attendee, Conference, Notification
 from flask import render_template, session, request, redirect, url_for, flash, make_response, session
