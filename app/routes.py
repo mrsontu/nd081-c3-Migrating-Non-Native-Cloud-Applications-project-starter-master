@@ -109,9 +109,68 @@ def notification():
             return redirect('/Notifications')
         except :
             logging.error('log unable to save notification')
+            return render_template('notification.html')
+
 
     else:
         return render_template('notification.html')
+
+@app.route('/pusNotification', methods=['POST'])
+def pusNotification():
+        notification = Notification()
+        notification.message = request.form['message']
+        notification.subject = request.form['subject']
+        notification.status = 'Notifications submitted'
+        notification.submitted_date = datetime.utcnow()
+
+        try:
+            db.session.add(notification)
+            db.session.commit()
+
+            try:
+                # Create a message containing the notification ID
+                message = Message(str(notification_id))
+                logging.error('log send queue')
+                
+                # Send the message to the queue
+                with queue_client.get_queue_sender() as sender:
+                    sender.send_messages(message)
+                
+                print(f"Notification ID {notification_id} enqueued successfully.")
+            except Exception as e:
+                 print(f"Failed to enqueue notification ID {notification_id}: {e}")
+            logging.error('log send queue ok')
+
+            attendees = Attendee.query.all()
+
+            for attendee in attendees:
+                subject = '{}: {}'.format(attendee.first_name, notification.subject)
+                send_email(attendee.email, subject, notification.message)
+
+            notification.completed_date = datetime.utcnow()
+            notification.status = 'Notified {} attendees'.format(len(attendees))
+            db.session.commit()
+            # TODO: Call servicebus queue_client to enqueue notification ID
+            try:
+                # Create a message containing the notification ID
+                message = Message(str(notification_id))
+
+                # Send the message to the queue
+                with queue_client.get_queue_sender() as sender:
+                    sender.send_messages(message)
+                
+                print(f"Notification ID {notification_id} enqueued successfully.")
+            except Exception as e:
+                print(f"Failed to enqueue notification ID {notification_id}: {e}")
+                return redirect('/Notifications')
+            except :
+                logging.error('log unable to save notification')
+
+            return redirect('/Notifications')
+        except :
+            logging.error('log unable to save notification')
+            return render_template('notification.html')
+
 
 
 
