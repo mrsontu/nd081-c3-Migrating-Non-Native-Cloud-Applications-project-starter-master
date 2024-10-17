@@ -134,7 +134,7 @@ def pushNotification():
             
             # Send the message to the queue
             with queue_client.get_sender() as sender:
-                sender.send_messages(message)
+                sender.send(message)
             
             print(f"Notification ID {notification.id} enqueued successfully.")
             logging.info('log send queue done')
