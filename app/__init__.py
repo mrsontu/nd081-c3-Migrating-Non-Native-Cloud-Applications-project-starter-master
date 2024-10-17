@@ -12,6 +12,6 @@ app.config.from_object('config.DevelopmentConfig')
 # queue_client = QueueClient.from_connection_string(app.config.get('SERVICE_BUS_CONNECTION_STRING'),
 #                                                  app.config.get('SERVICE_BUS_QUEUE_NAME'))
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
 from . import routes
