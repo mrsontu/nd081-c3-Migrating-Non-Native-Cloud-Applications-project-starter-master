@@ -148,9 +148,9 @@ def pushNotification():
             attendees = Attendee.query.all()
             logging.info('log ssave attendee')
 
-            for attendee in attendees:
-                subject = '{}: {}'.format(attendee.first_name, notification.subject)
-                logging.error('log send mail')
+            # for attendee in attendees:
+            #     subject = '{}: {}'.format(attendee.first_name, notification.subject)
+            #     logging.error('log send mail')
             logging.info('log ssave attendee done')
             
                 # send_email(attendee.email, subject, notification.message)
