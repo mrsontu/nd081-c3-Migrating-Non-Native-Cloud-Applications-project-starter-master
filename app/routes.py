@@ -127,22 +127,16 @@ def pushNotification():
             db.session.add(notification)
             db.session.commit()
 
-            try:
-                # Create a message containing the notification ID
-                message = Message(str(notification.id))
-                logging.info(f'log send queue {message}')
-                logging.info(f'log send queue {notification.id}')
-                
-                # Send the message to the queue
-                with queue_client.get_queue_sender() as sender:
-                    sender.send_messages(message)
-                
-                print(f"Notification ID {notification.id} enqueued successfully.")
-            except Exception as e:
-                 logging.error(e)
-                 logging.error(e.__traceback__)
-                 logging.error("senqueue")
-                 print(f"Failed to enqueue notification ID {notification.id}: {e}")
+            # Create a message containing the notification ID
+            message = Message(str(notification.id))
+            logging.info(f'log send queue {message}')
+            logging.info(f'log send queue {notification.id}')
+            
+            # Send the message to the queue
+            with queue_client.get_queue_sender() as sender:
+                sender.send_messages(message)
+            
+            print(f"Notification ID {notification.id} enqueued successfully.")
             logging.info('log send queue done')
 
             attendees = Attendee.query.all()
