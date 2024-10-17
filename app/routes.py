@@ -130,7 +130,7 @@ def pushNotification():
             try:
                 # Create a message containing the notification ID
                 message = Message(str(notification_id))
-                logging.error('log send queue')
+                logging.info('log send queue')
                 
                 # Send the message to the queue
                 with queue_client.get_queue_sender() as sender:
@@ -138,15 +138,20 @@ def pushNotification():
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
             except Exception as e:
+                 logging.error(e)
+                 logging.error(e.__traceback__)
+                 logging.error("senqueue")
                  print(f"Failed to enqueue notification ID {notification_id}: {e}")
-            logging.error('log send queue ok')
+            logging.info('log send queue done')
 
             attendees = Attendee.query.all()
+            logging.info('log ssave attendee')
 
             for attendee in attendees:
                 subject = '{}: {}'.format(attendee.first_name, notification.subject)
                 logging.error('log send mail')
-                
+            logging.info('log ssave attendee done')
+            
                 # send_email(attendee.email, subject, notification.message)
 
             notification.completed_date = datetime.utcnow()
@@ -155,6 +160,7 @@ def pushNotification():
             # TODO: Call servicebus queue_client to enqueue notification ID
             try:
                 # Create a message containing the notification ID
+                logging.info('Call servicebus queue_client to enqueue notification ID')
                 message = Message(str(notification_id))
 
                 # Send the message to the queue
@@ -163,14 +169,18 @@ def pushNotification():
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
             except Exception as e:
-                print(f"Failed to enqueue notification ID {notification_id}: {e}")
+                logging.error(e.__traceback__)
+                logging.error(f"Failed to enqueue notification ID {notification_id}: {e}")
                 return redirect('/Notifications')
-            except :
-                logging.error('log unable to save notification')
+            except Exception as e:
+                logging.error(e.__traceback__)
+                logging.error('log unable to save notification v2')
 
             return redirect('/Notifications')
-        except :
-            logging.error('log unable to save notification')
+        except  Exception as e:
+            logging.error(e)
+            logging.error(e.__traceback__)
+            logging.error('log unable to save notification v1')
             return render_template('notification.html')
 
 
