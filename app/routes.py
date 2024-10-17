@@ -73,7 +73,7 @@ def notification():
                 logging.error('log send queue')
                 
                 # Send the message to the queue
-                with queue_client.get_sender() as sender:
+                with queue_client.get_queue_sender() as sender:
                     sender.send_messages(message)
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
@@ -96,7 +96,7 @@ def notification():
                 message = Message(str(notification_id))
 
                 # Send the message to the queue
-                with queue_client.get_sender() as sender:
+                with queue_client.get_queue_sender() as sender:
                     sender.send_messages(message)
                 
                 print(f"Notification ID {notification_id} enqueued successfully.")
@@ -134,7 +134,7 @@ def pushNotification():
                 logging.info(f'log send queue {notification.id}')
                 
                 # Send the message to the queue
-                with queue_client.get_sender() as sender:
+                with queue_client.get_queue_sender() as sender:
                     sender.send_messages(message)
                 
                 print(f"Notification ID {notification.id} enqueued successfully.")
@@ -151,31 +151,31 @@ def pushNotification():
             # for attendee in attendees:
             #     subject = '{}: {}'.format(attendee.first_name, notification.subject)
             #     logging.error('log send mail')
-            logging.info('log ssave attendee done')
+            # logging.info('log ssave attendee done')
             
-                # send_email(attendee.email, subject, notification.message)
+            #     # send_email(attendee.email, subject, notification.message)
 
-            notification.completed_date = datetime.utcnow()
-            notification.status = 'Notified {} attendees'.format(len(attendees))
-            db.session.commit()
-            # TODO: Call servicebus queue_client to enqueue notification ID
-            try:
-                # Create a message containing the notification ID
-                logging.info('Call servicebus queue_client to enqueue notification ID')
-                message = Message(str(notification.id))
+            # notification.completed_date = datetime.utcnow()
+            # notification.status = 'Notified {} attendees'.format(len(attendees))
+            # db.session.commit()
+            # # TODO: Call servicebus queue_client to enqueue notification ID
+            # try:
+            #     # Create a message containing the notification ID
+            #     logging.info('Call servicebus queue_client to enqueue notification ID')
+            #     message = Message(str(notification.id))
 
-                # Send the message to the queue
-                with queue_client.get_sender() as sender:
-                    sender.send_messages(message)
+            #     # Send the message to the queue
+            #     with queue_client.get_queue_sender() as sender:
+            #         sender.send_messages(message)
                 
-                print(f"Notification ID {notification.id} enqueued successfully.")
-            except Exception as e:
-                logging.error(e.__traceback__)
-                logging.error(f"Failed to enqueue notification ID {notification.id}: {e}")
-                return redirect('/Notifications')
-            except Exception as e:
-                logging.error(e.__traceback__)
-                logging.error('log unable to save notification v2')
+            #     print(f"Notification ID {notification.id} enqueued successfully.")
+            # except Exception as e:
+            #     logging.error(e.__traceback__)
+            #     logging.error(f"Failed to enqueue notification ID {notification.id}: {e}")
+            #     return redirect('/Notifications')
+            # except Exception as e:
+            #     logging.error(e.__traceback__)
+            #     logging.error('log unable to save notification v2')
 
             return redirect('/Notifications')
         except  Exception as e:
