@@ -115,8 +115,8 @@ def notification():
     else:
         return render_template('notification.html')
 
-@app.route('/pusNotification', methods=['POST'])
-def pusNotification():
+@app.route('/pushNotification', methods=['POST'])
+def pushNotification():
         notification = Notification()
         notification.message = request.form['message']
         notification.subject = request.form['subject']
