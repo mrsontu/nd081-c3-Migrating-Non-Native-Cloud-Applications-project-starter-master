@@ -70,6 +70,7 @@ def notification():
             try:
                 # Create a message containing the notification ID
                 message = Message(str(notification_id))
+                logging.error('log send queue')
                 
                 # Send the message to the queue
                 with queue_client.get_queue_sender() as sender:
@@ -78,6 +79,7 @@ def notification():
                 print(f"Notification ID {notification_id} enqueued successfully.")
             except Exception as e:
                  print(f"Failed to enqueue notification ID {notification_id}: {e}")
+            logging.error('log send queue ok')
 
             attendees = Attendee.query.all()
 
